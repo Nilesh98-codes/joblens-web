@@ -1,15 +1,17 @@
-# JobLens
+# JobLens v3
 
 #### Video Demo: https://youtu.be/Oa-S7ZLmMcs?si=NcJKvpjNyIFh-O6P
-The video demo is of v1, check the screenshots for v2.
 
+**v3** - New version which will use a database and FastAPI, will be a Full stack app
 <!-- TODO: Re-record demo video to show the updated Rich terminal UI -->
 **v2** — Enhanced with a Rich-powered terminal UI after course submission.
 
 
 #### Description
 
-JobLens is a command-line job application tracker built with Python as my final project for CS50’s Introduction to Programming with Python (CS50P).
+JobLens v3 is the new updated version of the command-line job application tracker built with Python as my final project for CS50’s Introduction to Programming with Python (CS50P).
+
+This will be in the web and anyone can use it. I just felt the need to update it because as much as i like the CLI, this one would feel much better and would be a great learning experience in my opinion.
 
 I created this project because keeping track of my own job applications, interview stages, and job links became difficult. JobLens allows users to store and manage job applications, search existing records, view application statistics, and compare their resume with a job description using a simple resume matcher.
 
