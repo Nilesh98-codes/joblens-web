@@ -1,6 +1,7 @@
 import pytest
-from project import JobApplication, load_json_file, save_json_file
 import json
+from model import JobApplication
+from repository import load_json_file, save_json_file
 
 
 
@@ -304,7 +305,7 @@ def test_save_overwrites_existing_file(tmp_path):
 
 
 # ─── New tests: resume_matcher pure-logic functions ───────────────────
-from resume_matcher import extract_skills, calculate_match_score, format_skill
+from matcher import extract_skills, calculate_match_score, format_skill
 
 
 
@@ -348,3 +349,104 @@ def test_format_skill():
     # unknown skill falls back to .title()
     assert format_skill("flask") == "Flask"
     assert format_skill("docker") == "Docker"
+
+
+# ─── New tests: service-layer functions ───────────────────────────────
+import repository
+import service
+
+
+def _seed_test_file(tmp_path, monkeypatch, apps=None):
+    """Helper: create a temp JSON file and monkeypatch the repository constant."""
+    filepath = tmp_path / "test_apps.json"
+    if apps is None:
+        apps = [
+            JobApplication(id=1, company="Google", role="SWE", location="NYC",
+                           date_applied="2026-01-01", status="Applied",
+                           job_link="", notes=""),
+            JobApplication(id=2, company="Meta", role="PM", location="London",
+                           date_applied="2026-02-15", status="Interview",
+                           job_link="", notes="Phone screen"),
+            JobApplication(id=3, company="Apple", role="Designer", location="Cupertino",
+                           date_applied="2026-03-10", status="Rejected",
+                           job_link="", notes=""),
+        ]
+    save_json_file(filepath, apps)
+    monkeypatch.setattr(repository, "APPLICATIONS_FILE", str(filepath))
+    return filepath, apps
+
+
+def test_service_add_application(tmp_path, monkeypatch):
+    """service.add_application creates a new entry and returns it."""
+    filepath, _ = _seed_test_file(tmp_path, monkeypatch, apps=[])
+    result = service.add_application(
+        company="TestCo", role="SWE", location="NYC",
+        date_applied="2026-06-01", status="Applied",
+        job_link="", notes="test"
+    )
+    assert result.id == 1
+    assert result.company == "TestCo"
+    loaded = load_json_file(filepath)
+    assert len(loaded) == 1
+
+
+def test_service_get_all_applications(tmp_path, monkeypatch):
+    """service.get_all_applications returns all persisted records."""
+    _seed_test_file(tmp_path, monkeypatch)
+    apps = service.get_all_applications()
+    assert len(apps) == 3
+
+
+def test_service_get_application_by_id(tmp_path, monkeypatch):
+    """service.get_application_by_id returns the app or None."""
+    _seed_test_file(tmp_path, monkeypatch)
+    found = service.get_application_by_id(2)
+    assert found is not None
+    assert found.company == "Meta"
+
+    not_found = service.get_application_by_id(999)
+    assert not_found is None
+
+
+def test_service_update_status(tmp_path, monkeypatch):
+    """service.update_application_status returns True/False and persists."""
+    filepath, _ = _seed_test_file(tmp_path, monkeypatch)
+    assert service.update_application_status(1, "Offer") is True
+    reloaded = load_json_file(filepath)
+    assert reloaded[0].status == "Offer"
+
+    assert service.update_application_status(999, "Offer") is False
+
+
+def test_service_delete_application(tmp_path, monkeypatch):
+    """service.delete_application returns True/False and persists."""
+    filepath, _ = _seed_test_file(tmp_path, monkeypatch)
+    assert service.delete_application(2) is True
+    reloaded = load_json_file(filepath)
+    assert len(reloaded) == 2
+    assert all(app.id != 2 for app in reloaded)
+
+    assert service.delete_application(999) is False
+
+
+def test_service_search_applications(tmp_path, monkeypatch):
+    """service.search_applications uses startswith matching."""
+    _seed_test_file(tmp_path, monkeypatch)
+    results = service.search_applications("company", "goo")
+    assert len(results) == 1
+    assert results[0].company == "Google"
+
+    empty = service.search_applications("company", "zzz")
+    assert empty == []
+
+
+def test_service_compute_statistics(tmp_path, monkeypatch):
+    """service.compute_statistics returns correct counts."""
+    _seed_test_file(tmp_path, monkeypatch)
+    track, total = service.compute_statistics()
+    assert total == 3
+    assert track["Applied"] == 1
+    assert track["Interview"] == 1
+    assert track["Rejected"] == 1
+    assert track["Offer"] == 0
+    assert track["Online Assessment"] == 0

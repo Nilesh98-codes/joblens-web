@@ -40,13 +40,7 @@ STATUS_STYLE = {
     "Rejected": "red",
 }
 
-STATUS_ICONS = {
-    "Applied": "\U0001f4dd",        # 📝
-    "Online Assessment": "\U0001f4bb",  # 💻
-    "Interview": "\U0001f4bc",      # 💼
-    "Offer": "\U0001f389",          # 🎉
-    "Rejected": "\u274c",           # ❌
-}
+from model import STATUS_ICONS  # single source of truth; was a local copy
 
 MENU_ICONS = {
     "1": "\u2795",   # ➕
