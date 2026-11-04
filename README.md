@@ -2,7 +2,7 @@
 
 #### Video Demo: https://youtu.be/Oa-S7ZLmMcs?si=NcJKvpjNyIFh-O6P
 
-**v3** - New version which will use a database and FastAPI, will be a Full stack app
+**v3** - New version which will use a database and FastAPI, will be a Full stack app. Work in progress
 <!-- TODO: Re-record demo video to show the updated Rich terminal UI -->
 **v2** — Enhanced with a Rich-powered terminal UI after course submission.
 
@@ -204,15 +204,3 @@ and the resume matcher only read the last page of multi-page PDFs.
 
 **v1** — Original CS50P submission.
 
-## What I Learned
-
-
-This project helped me apply many of the concepts I learned throughout CS50P, including object-oriented programming, JSON handling, exception handling, and testing with `pytest`.
-
-One of the biggest challenges was keeping the project organized as it grew. Separating the resume matcher into its own module made the code much cleaner, and I also became more confident writing structured code and choosing better variable and function names.
-
-Building the resume matcher and writing automated tests were the most enjoyable parts of the project because they challenged me to apply concepts beyond simply storing and managing data.
-
-The UI upgrade was a good exercise in separating concerns. I wanted the terminal output to look more polished — partly for readability, partly because I use this tool myself and wanted it to feel nicer — so I constrained myself to presentation-only changes: no logic modifications, no new features, just a cleaner interface. Extracting all rendering into `ui.py` made this much easier than I expected, and reinforced the value of keeping display code separate from business logic.
-
-Overall, this project was a great learning experience. Thank you to the entire CS50 team for creating such an amazing course—it has been an incredible journey!
