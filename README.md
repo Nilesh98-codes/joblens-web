@@ -15,10 +15,9 @@ This will be in the web and anyone can use it. I just felt the need to update it
 
 I created this project because keeping track of my own job applications, interview stages, and job links became difficult. JobLens allows users to store and manage job applications, search existing records, view application statistics, and compare their resume with a job description using a simple resume matcher.
 
-My goal was to build a practical application that combines object-oriented programming, JSON file handling, testing with `pytest`, and modular Python design into a project that I can continue using and improving even after completing CS50P.
 
 
-## Screenshots
+## Screenshots (New ones coming soon)
 
 ![Main menu](screenshots/main-menu.png)
 The main menu and welcome screen.
